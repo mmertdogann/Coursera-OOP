@@ -79,6 +79,7 @@ public class HelloWorld extends PApplet
 
 		map2 = new UnfoldingMap(this, 430, 50, 350, 500, provider);
 		
+		// MEF University
 		map2.zoomAndPanTo(zoomLevel, new Location(41.1088485f, 29.0064077f));
 		
 		MapUtils.createDefaultEventDispatcher(this, map2);
