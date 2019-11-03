@@ -11,7 +11,7 @@ import de.fhpotsdam.unfolding.geo.Location;
 import de.fhpotsdam.unfolding.marker.AbstractShapeMarker;
 import de.fhpotsdam.unfolding.marker.Marker;
 import de.fhpotsdam.unfolding.marker.MultiMarker;
-import de.fhpotsdam.unfolding.providers.Google;
+import de.fhpotsdam.unfolding.providers.Microsoft;
 import de.fhpotsdam.unfolding.providers.MBTilesMapProvider;
 import de.fhpotsdam.unfolding.utils.MapUtils;
 import parsing.ParseFeed;
@@ -20,7 +20,7 @@ import processing.core.PApplet;
 /** EarthquakeCityMap
  * An application with an interactive map displaying earthquake data.
  * Author: UC San Diego Intermediate Software Development MOOC team
- * @author Your name here
+ * @author Mert Doğan
  * Date: July 17, 2015
  * */
 public class EarthquakeCityMap extends PApplet {
@@ -68,7 +68,7 @@ public class EarthquakeCityMap extends PApplet {
 		    earthquakesURL = "2.5_week.atom";  // The same feed, but saved August 7, 2015
 		}
 		else {
-			map = new UnfoldingMap(this, 200, 50, 650, 600, new Google.GoogleMapProvider());
+			map = new UnfoldingMap(this, 200, 50, 650, 600, new Microsoft.RoadProvider());
 			// IF YOU WANT TO TEST WITH A LOCAL FILE, uncomment the next line
 		    //earthquakesURL = "2.5_week.atom";
 		}
@@ -80,7 +80,7 @@ public class EarthquakeCityMap extends PApplet {
 		//earthquakesURL = "test2.atom";
 		
 		// WHEN TAKING THIS QUIZ: Uncomment the next line
-		//earthquakesURL = "quiz1.atom";
+		earthquakesURL = "quiz1.atom";
 		
 		
 		// (2) Reading in earthquake data and geometric properties
@@ -134,24 +134,81 @@ public class EarthquakeCityMap extends PApplet {
 	private void addKey() {	
 		// Remember you can use Processing's graphics methods here
 		fill(255, 250, 240);
-		rect(25, 50, 150, 250);
+		rect(25, 50, 150, 300);
 		
 		fill(0);
 		textAlign(LEFT, CENTER);
 		textSize(12);
-		text("Earthquake Key", 50, 75);
+		text("Earthquake Key", 50, 100);
 		
-		fill(color(255, 0, 0));
-		ellipse(50, 125, 15, 15);
-		fill(color(255, 255, 0));
-		ellipse(50, 175, 10, 10);
-		fill(color(0, 0, 255));
-		ellipse(50, 225, 5, 5);
+		fill(200, 30, 30);
+		triangle(50, 125, 50-5, 125+5, 50+5, 125+5);
 		
-		fill(0, 0, 0);
-		text("5.0+ Magnitude", 75, 125);
-		text("4.0+ Magnitude", 75, 175);
-		text("Below 4.0", 75, 225);
+		
+		fill(0);
+		textAlign(LEFT, CENTER);
+		textSize(12);
+		text("City Marker", 75, 125);
+		
+		
+		fill(255);
+		ellipse(50, 150, 10,10);
+		
+		
+		fill(0);
+		textAlign(LEFT, CENTER);
+		textSize(12);
+		text("Land Quake", 75, 150);
+
+		
+		fill(255,255,255);
+		rect(45, 170, 10,10);
+		
+		fill(0);
+		textAlign(LEFT, CENTER);
+		textSize(12);
+		text("Ocean Quake", 75, 175);
+		
+			
+		fill(0);
+		textAlign(LEFT, CENTER);
+		textSize(12);
+		text("Size ~ Magnitude", 50, 225);
+		
+		
+		fill(255,255,0);
+		ellipse(50, 250, 10,10);
+		
+		fill(0);
+		textAlign(LEFT, CENTER);
+		textSize(12);
+		text("Shallow", 75, 250);
+		
+		fill(0,0,255);
+		ellipse(50, 275, 10,10);
+		
+		fill(0);
+		textAlign(LEFT, CENTER);
+		textSize(12);
+		text("Intermediate", 75, 275);
+		
+		fill(255,0,0);
+		ellipse(50, 300, 10,10);
+		
+		fill(0);
+		textAlign(LEFT, CENTER);
+		textSize(12);
+		text("Deep", 75, 300);
+		
+		
+		text("Past hour", 75, 325);
+		
+		fill(255, 255, 255);
+		ellipse(50, 325, 12, 12);
+		
+		strokeWeight(2);
+		line(50-8, 325-8, 50+8, 325+8);
+		line(50-8, 325+8, 50+8, 325-8);
 	}
 
 	
@@ -170,7 +227,9 @@ public class EarthquakeCityMap extends PApplet {
 		// If isInCountry ever returns true, isLand should return true.
 		for (Marker m : countryMarkers) {
 			// TODO: Finish this method using the helper method isInCountry
-			
+			if(isInCountry(earthquake, m)) {
+				return true;
+			}
 		}
 		
 		
@@ -186,10 +245,30 @@ public class EarthquakeCityMap extends PApplet {
 	 * */
 	private void printQuakes() 
 	{
+		int numOcean = quakeMarkers.size();
 		// TODO: Implement this method
 		// One (inefficient but correct) approach is to:
 		//   Loop over all of the countries, e.g. using 
-		//        for (Marker cm : countryMarkers) { ... }
+		for (Marker cm : countryMarkers) {
+			int numQuakes = 0;
+			String name = (String)cm.getProperty("name");
+			
+			for(Marker m : quakeMarkers) {
+				EarthquakeMarker em = (EarthquakeMarker)m;
+				String country = (String)m.getProperty("country");
+				if(em.isOnLand()) {
+					if(name.equals(country)) {
+						numQuakes++;
+					}	
+				}
+			}
+			if (numQuakes > 0) {
+				numOcean -= numQuakes;
+				System.out.println(name + ": " + numQuakes);
+			}
+
+		}
+		System.out.println("OCEAN QUAKES: " + numOcean);
 		//        
 		//      Inside the loop, first initialize a quake counter.
 		//      Then loop through all of the earthquake

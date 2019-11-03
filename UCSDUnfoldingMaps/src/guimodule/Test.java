@@ -5,17 +5,20 @@ import java.util.List;
 
 public class Test {
 	public static void main(String[] args) {
-		List<Integer> countries = new ArrayList<>();
 		
-		countries.add(23);
-		countries.add(24);
-		countries.add(25);
-		countries.add(26);
-		System.out.println(countries);
-		
-
+		Student s = new Student();
+		Person p = new Person();
+		Person q = new Person();
+		Faculty f = new Faculty();
+		Object o = new Faculty();
 		
 		
+		
+		String n = s.getName();
+		p = s;
+		int m = ((Student)p).getID();
+		
+	
 	}
 
 }
