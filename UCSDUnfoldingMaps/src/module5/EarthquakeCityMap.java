@@ -14,6 +14,7 @@ import de.fhpotsdam.unfolding.marker.MultiMarker;
 import de.fhpotsdam.unfolding.providers.Google;
 import de.fhpotsdam.unfolding.providers.MBTilesMapProvider;
 import de.fhpotsdam.unfolding.utils.MapUtils;
+import module6.CommonMarker;
 import parsing.ParseFeed;
 import processing.core.PApplet;
 
@@ -146,6 +147,21 @@ public class EarthquakeCityMap extends PApplet {
 	private void selectMarkerIfHover(List<Marker> markers)
 	{
 		// TODO: Implement this method
+		if (lastSelected != null) {
+			return;
+		}
+		
+		for (Marker marker : markers) 
+		{
+			CommonMarker m = (CommonMarker)marker;
+			
+			
+			if (m.isInside(map,  mouseX, mouseY)) {
+				lastSelected = m;
+				m.setSelected(true);
+				return;
+			}
+		}
 	}
 	
 	/** The event handler for mouse clicks
@@ -159,6 +175,12 @@ public class EarthquakeCityMap extends PApplet {
 		// TODO: Implement this method
 		// Hint: You probably want a helper method or two to keep this code
 		// from getting too long/disorganized
+		
+		if (lastClicked != null) {
+			unhideMarkers();
+			lastClicked = null;
+		}
+		
 	}
 	
 	
