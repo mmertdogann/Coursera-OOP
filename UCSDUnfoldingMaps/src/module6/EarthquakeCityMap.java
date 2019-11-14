@@ -2,6 +2,8 @@ package module6;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import de.fhpotsdam.unfolding.UnfoldingMap;
@@ -115,6 +117,8 @@ public class EarthquakeCityMap extends PApplet {
 		  }
 	    }
 
+	    
+	    sortAndPrint(15);
 	    // could be used for debugging
 	    printQuakes();
 	 		
@@ -137,7 +141,24 @@ public class EarthquakeCityMap extends PApplet {
 	
 	
 	// TODO: Add the method:
-	//   private void sortAndPrint(int numToPrint)
+	private void sortAndPrint(int numToPrint) {
+		Object[] marker=quakeMarkers.toArray();
+		
+		Arrays.sort(marker,Collections.reverseOrder());
+		if(numToPrint>marker.length){
+			for(int i=0;i<marker.length;i++){
+				System.out.println(marker[i]);
+			}
+			
+		}
+		else
+		{
+			for(int i=0;i<numToPrint;i++){
+				System.out.println(marker[i]);
+			}
+		}
+	}
+	
 	// and then call that method from setUp
 	
 	/** Event handler that gets called automatically when the 
