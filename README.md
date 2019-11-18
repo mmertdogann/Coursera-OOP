@@ -4,4 +4,4 @@ In this course, I implement a Graphical User Interface which showing earthquakes
 
 Here's an image of a drag racer in action:
 
-![Earthquake Map](./map.png)
+![Earthquake Map](map.png)
